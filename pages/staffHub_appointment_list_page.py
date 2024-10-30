@@ -116,7 +116,7 @@ class ApptListPage():
         latestpatient = appointmentsdata['patient']['name']
         print("this is the appointment code of the latest appointment in appointment list : \n",apptcode)
         assert apptcode == createdapptcode, "appointment codes do not match"
-        assert latestpatient == 'Ishlah Test uto', "Latest patient is NOT the test user"
+        assert latestpatient == 'Ishlah Test Auto', "Latest patient is NOT the test user"
         print("Appointment codes are matching!")
 
     def retrieveApptID(self,createdapptcode):

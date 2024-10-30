@@ -50,18 +50,22 @@ class TestApptChrome():
             alp.verifyApptCreatedAPI(newappointmentCode)
 
         #perform user delete if any exception is raised
-        except Exception as e:
-             print("exception raised. something went wrong..")
+        except Exception as Argument:
+             print("exception raised. something went wrong..",Argument)
              alp.deletepatient(testpatientID)
+             apptid= alp.retrieveApptID(newappointmentCode)
+             alp.cancelLatestAppt(apptid)
+             raise AssertionError(Argument)
 
-        #delete test patient once everything is done (to prevent DB becoming messy)
-        print("no exception raised. deleting patient data..")
-        alp.deletepatient(testpatientID)
 
-        #cancel appointment once everything is done (to make this script more flexible, can reuse)
-        print("cancelling previously created appointment..")
-        apptid= alp.retrieveApptID(newappointmentCode)
-        alp.cancelLatestAppt(apptid)
+        else:
+            #delete test patient once everything is done (to prevent DB becoming messy)
+            print("no exception raised. deleting patient data..")
+            alp.deletepatient(testpatientID)
+            #cancel appointment once everything is done (to make this script more flexible, can reuse)
+            print("cancelling previously created appointment..")
+            apptid= alp.retrieveApptID(newappointmentCode)
+            alp.cancelLatestAppt(apptid)
 
 
     # def testJustDelete(self):
