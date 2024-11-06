@@ -44,7 +44,7 @@ class ApptListPage():
         #Click on Doctor / Service dropdown list and select the test doctor
         self.driver1.find_element(By.XPATH,"//div[@data-em-name='SelectDoctorOrService']//input[@class='n-base-selection-input']").click()
         self.driver1.find_element(By.XPATH,"//span[@class='n-text'][contains(text(),'Doctors')]").click()
-        self.driver1.find_element(By.XPATH,"//span[contains(text(),'KLANG')]").click()
+        self.driver1.find_element(By.XPATH,"//span[contains(text(),'ISHLAH DOCTORS')]").click()
         self.driver1.find_element(By.XPATH,"//span[contains(text(),'Jing')]").click()
 
         #Populate Visit Type field
