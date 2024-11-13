@@ -1,5 +1,7 @@
 import requests
 from testdata.localvariables import *
+import json
+from datetime import datetime
 
 USERNAME = username
 PASSWORD = password
@@ -18,7 +20,7 @@ def staffAuthentication():
         token=r_response["result"]["token"]
         return token
 
-def createDoctor():
+def doctor_Create():
     token = staffAuthentication()
     createdoctorbody = {
             "tenantCode" : "pah" ,
@@ -38,13 +40,13 @@ def createDoctor():
             doctorname = r_response ["result"]["doctor"]["name"]
             print("Doctor ID : ", doctorid)
             print("\nDoctor Name : ",doctorname)
-    else:
+    else: 
             print("Doctor unsuccessfully failed: \n", r.status_code, r.text)
 
 
     return r.status_code,doctorid
 
-def viewDoctor(tenantCode:str,doctorID:str):
+def doctor_View(tenantCode:str,doctorID:str):
     token = staffAuthentication()
     viewDoctorParams = {
             "tenantCode" : tenantCode ,
@@ -62,7 +64,7 @@ def viewDoctor(tenantCode:str,doctorID:str):
 
     return r.status_code
 
-def updateDoctor(tenantCode:str,doctorID:str):
+def doctor_Update(tenantCode:str,doctorID:str):
     token = staffAuthentication()
     updateDoctorData = {
             "tenantCode" : tenantCode ,
@@ -84,7 +86,7 @@ def updateDoctor(tenantCode:str,doctorID:str):
 
     return r.status_code
 
-def deleteDoctor(tenantCode:str,doctorID:str):
+def doctor_Delete(tenantCode:str,doctorID:str):
     token = staffAuthentication()
     deletedoctordata = {
             "tenantCode" : tenantCode ,
@@ -103,7 +105,7 @@ def deleteDoctor(tenantCode:str,doctorID:str):
     return r.status_code
 
 
-def createPatient():
+def patient_Create():
     token = staffAuthentication()
 
     patientdata = {
@@ -131,7 +133,7 @@ def createPatient():
     return r.status_code,patientId
 
 
-def viewPatient(tenantCode:str,patientID:str):
+def patient_View(tenantCode:str,patientID:str):
     token = staffAuthentication()
     viewPatientParams = {
             "tenantCode" : tenantCode ,
@@ -150,7 +152,7 @@ def viewPatient(tenantCode:str,patientID:str):
 
     return r.status_code
 
-def updatePatient(tenantCode,patientID):
+def patient_Update(tenantCode,patientID):
     token = staffAuthentication()
     updatePatientData = {
             "tenantCode" : tenantCode ,
@@ -171,7 +173,7 @@ def updatePatient(tenantCode,patientID):
     return r.status_code
 
 
-def deletePatient(tenantCode,patientID):
+def patient_Delete(tenantCode,patientID):
     token = staffAuthentication()
     deletepatientdata = {
             "tenantCode" : tenantCode ,
@@ -189,7 +191,7 @@ def deletePatient(tenantCode,patientID):
 
     return r.status_code
 
-def createStaff():
+def staff_Create():
         token = staffAuthentication()
         createstaffbody = {
             "tenantCode" : "pah" ,
@@ -218,7 +220,7 @@ def createStaff():
         return r.status_code,staffid
 
 
-def viewStaff(tenantCode,staffID):
+def staff_View(tenantCode,staffID):
     token = staffAuthentication()
     viewStaffParams = {
             "tenantCode" : tenantCode ,
@@ -237,7 +239,7 @@ def viewStaff(tenantCode,staffID):
 
     return r.status_code
 
-def updateStaff(tenantCode,staffID):
+def staff_Update(tenantCode,staffID):
     token = staffAuthentication()
     updateStaffData = {
             "tenantCode" : tenantCode ,
@@ -257,7 +259,7 @@ def updateStaff(tenantCode,staffID):
 
     return r.status_code
 
-def deleteStaff(tenantCode , staffID):
+def staff_Delete(tenantCode , staffID):
     token = staffAuthentication()
     deletestaffdata = {
             "tenantCode" : tenantCode ,
@@ -275,26 +277,233 @@ def deleteStaff(tenantCode , staffID):
 
     return r.status_code
 
-def createAppointment():
-    return
+def appointment_Create():
+    #get current system time
+    current_time = datetime.now()
+    #Convert the date to ISO format
+    iso_time = current_time.isoformat()
 
-def retrieveAppointment():
-    return
+    token = staffAuthentication()
+    createapptjson = {
+    "tenantCode" : "pah",
+    "patient": {
+        "name": "auto appointment creation patient"
+    },
+    "doctorId": "685ff9ac-7c70-46c1-b2b2-ae905951dcce",
+    "startAt": iso_time
+}
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, create staff using API AND store the response
+    r = requests.post("https://staffhub-dev.encoremed.io/api/v1/pah/staff/appointment/create", json=createapptjson, headers=headers)
+    r_response = r.json()
 
-def updateAppointment():
-    return
+    if r.status_code == 201:
+        print("appointment successfully created! : \n", r_response)
+        apptid = r_response["result"]["appointment"]["id"]
+        print("Appointment ID : ", apptid)
+    else:
+            print("Appointment unsuccessfully created: \n", r.status_code, r.text)
 
-def deleteAppointment():
-    return
 
-def createVisit():
-    return
+    return r.status_code,apptid
 
-def retrieveVisit():
-    return
 
-def updateVisit():
-    return
+def appointment_View(tenantCode,apptid):
+    token = staffAuthentication()
+    viewApptParams = {
+            "tenantCode" : tenantCode ,
+            "appointmentId" : apptid
+        }
+    
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve staff details using API AND store the response
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/pah/staff/appointment/view", params=viewApptParams, headers=headers)
 
-def deleteVisit():
-    return
+    if r.status_code == 200:
+            print("Appointment successfully retrieved! : \n", r.json())
+    else:
+            print("Appointment unsuccessfully retrieved! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def appointment_Update(tenantCode,apptid):
+    token = staffAuthentication()
+    updateApptJSON = {
+            "tenantCode" : tenantCode ,
+            "appointmentId" : apptid,
+            "remark" : "THIS IS FROM AUTOMATED APPOINTMENT UPDATE API",
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, update patient details using API AND store the response
+    r = requests.put("https://staffhub-dev.encoremed.io/api/v1/pah/staff/appointment/update", json=updateApptJSON, headers=headers)
+
+    if r.status_code == 200:
+            print("appointment details successfully updated! : \n", r.json())
+    else:
+            print("appointment details unsuccessfully updated! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def appointment_Delete(tenantCode,apptid):
+    token = staffAuthentication()
+    deleteapptdata = {
+            "tenantCode" : tenantCode ,
+            "appointmentId" : apptid    
+        }
+     # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, delete staff using API AND store the response
+    r = requests.delete("https://staffhub-dev.encoremed.io/api/v1/pah/staff/appointment/delete", data=deleteapptdata, headers=headers)
+
+    if r.status_code == 200:
+            print("appointment successfully deleted! : \n", r.json())
+    else:
+            print("appointment unsuccessfully deleted! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def visit_Create():
+    token = staffAuthentication()
+    createvisitJSON = {
+    "tenantCode" : "pah",
+    "patient": {
+        "name": "auto visit creation patient"
+    },
+    "doctorId": "685ff9ac-7c70-46c1-b2b2-ae905951dcce" #Doctor Bong
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, create staff using API AND store the response
+    r = requests.post("https://staffhub-dev.encoremed.io/api/v1/pah/staff/visit/create", json=createvisitJSON, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 201:
+        print("Visit successfully created! : \n", r_response)
+        visitid = r_response["result"]["visit"]["id"]
+        print("visit ID : ", visitid)
+    else:
+            print("visit unsuccessfully created: \n", r.status_code, r.text)
+
+
+    return r.status_code,visitid
+
+def visit_View(tenantCode,visitid):
+    token = staffAuthentication()
+    viewvisitparams = {
+            "tenantCode" : tenantCode ,
+            "visitId" : visitid
+        }
+    
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve staff details using API AND store the response
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/pah/staff/visit/view", params=viewvisitparams, headers=headers)
+
+    if r.status_code == 200:
+            print("Visit successfully retrieved! : \n", r.json())
+    else:
+            print("Visit unsuccessfully retrieved! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def visit_Update(tenantCode,visitid):
+    token = staffAuthentication()
+    updateVisitJSON = {
+            "tenantCode" : tenantCode ,
+            "visitId" : visitid,
+            "remark" : "THIS IS FROM AUTOMATED VISIT UPDATE API",
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, update patient details using API AND store the response
+    r = requests.put("https://staffhub-dev.encoremed.io/api/v1/pah/staff/visit/update", json=updateVisitJSON, headers=headers)
+
+    if r.status_code == 200:
+            print("visit details successfully updated! : \n", r.json())
+    else:
+            print("visit details unsuccessfully updated! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+
+def visit_Delete(tenantCode,visitid):
+    token = staffAuthentication()
+    deletevisitdata = {
+            "tenantCode" : tenantCode ,
+            "visitId" : visitid    
+        }
+     # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, delete staff using API AND store the response
+    r = requests.delete("https://staffhub-dev.encoremed.io/api/v1/pah/staff/visit/delete", data=deletevisitdata, headers=headers)
+    if r.status_code == 200:
+            print("visit successfully deleted! : \n", r.json())
+    else:
+            print("visit unsuccessfully deleted! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def staffProfile_View(tenantCode):
+        token = staffAuthentication()
+        profileviewparams = {
+            "tenantCode" : tenantCode ,
+                }
+        # Set the authorization header of the request
+        headers = {"Authorization" : f"Bearer {token}"}
+        #using requests library, delete staff using API AND store the response
+        r = requests.get("https://staffhub-dev.encoremed.io/api/v1/pah/staff/profile/view", params=profileviewparams, headers=headers)
+        if r.status_code == 200:
+            print("Staff Profile successfully retrieved : \n", r.json())
+        else:
+            print("Staff Profile unsuccessfully deleted! : \n", r.status_code, r.text)
+
+        return r.status_code
+
+def staffProfile_password(tenantCode):
+        token = staffAuthentication()
+        passwordupdatedata = {
+                "tenantCode" : tenantCode,
+                "password" : PASSWORD,
+                "newPassword" : password2
+        }
+        # Set the authorization header of the request
+        headers = {"Authorization" : f"Bearer {token}"}
+        #using requests library, delete staff using API AND store the response
+        r = requests.put("https://staffhub-dev.encoremed.io/api/v1/pah/staff/profile/password", data=passwordupdatedata, headers=headers)
+        if r.status_code == 200:
+                print("Staff password successfully updated! : \n", r.json())
+                #revert password changes
+                passwordupdatedata = {
+                "password" : password2,
+                "newPassword" : PASSWORD
+                }
+                headers = {"Authorization" : f"Bearer {token}"}
+                r = requests.put("https://staffhub-dev.encoremed.io/api/v1/pah/staff/profile/password", data=passwordupdatedata, headers=headers)
+                if r.status_code == 200:
+                      print("reverted again")
+                print("staff password reverted after success")
+        else:
+                print("Staff password unsuccessfully updated! : \n", r.status_code, r.text)
+        
+        return r.status_code
+      
+
+def staffProfile_Update(tenantCode,staffname):
+        token = staffAuthentication()
+        profileupdatedata = {
+            "tenantCode" : tenantCode ,
+            "name" : staffname
+                }
+        # Set the authorization header of the request
+        headers = {"Authorization" : f"Bearer {token}"}
+        #using requests library, delete staff using API AND store the response
+        r = requests.put("https://staffhub-dev.encoremed.io/api/v1/pah/staff/profile/update", data=profileupdatedata, headers=headers)
+        if r.status_code == 200:
+            print("Staff Profile successfully updated! : \n", r.json())
+        else:
+            print("Staff Profile unsuccessfully updated! : \n", r.status_code, r.text)
+
+        return r.status_code
