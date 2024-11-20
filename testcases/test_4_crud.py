@@ -1,5 +1,16 @@
 from utilities.crud import *
 
+def testCRUD_Staff_Authentication():
+    
+    #login API
+    token = authentication_Login()
+    assert (token is not None) ,"Login API failed"
+
+    #forgot password API
+    forgotPasswordAPI_resp = authentication_Forgot_Password()
+
+ 
+
 def testCRUD_Doctor():
 
     #create doctor API
@@ -35,6 +46,11 @@ def testCRUD_Patient():
     assert deletePatientAPI_resp == 200, "Delete Patient API failed"
 
 def testCRUD_Staff():
+
+    #retrieve Staff List API
+    staffListAPI_resp = staff_List()
+    assert staffListAPI_resp == 200, "Staff List API failed"
+
     #create Staff API
     createStaffAPI_resp,staffId = staff_Create()
     assert createStaffAPI_resp == 201 , "Create Patient API failed"
@@ -50,7 +66,6 @@ def testCRUD_Staff():
     deleteStaffAPI_resp = staff_Delete("pah",staffId)
     assert deleteStaffAPI_resp == 200, "Delete Patient API failed"
     
-# def testCRUD_Visit():
 
 def testCRUD_Appointment():
 
@@ -70,6 +85,7 @@ def testCRUD_Appointment():
     deleteApptAPI_resp = appointment_Delete("pah",apptid)
     assert deleteApptAPI_resp == 200, "delete Appointment API failed"
 
+#Staff: Visit API
 def testCRUD_Visit():
 
     #create Visit API
@@ -100,3 +116,42 @@ def testCRUD_StaffProfile():
     #update Staff profile API
     staffProfileUpdateAPI_resp = staffProfile_Update("pah","try update staff profile name")
     assert staffProfileUpdateAPI_resp == 200, "Update Staff Profile API"
+
+    #revert back to original staff profile name
+    staffProfile_Update("pah","Ishlah")
+
+def testCRUD_Role():
+
+    #Create Role API
+    createRoleAPI_resp,roleid = role_Create("test role auto")
+    assert createRoleAPI_resp == 201 , "Create Role API failed"
+
+    #View Role API
+    viewRoleAPI_resp = role_View(roleid)
+    assert viewRoleAPI_resp == 200, "View Role API failed"
+
+    #update Role API
+    updateRoleAPI_resp = role_Update("pah",roleid,"test role auto updated")
+    assert updateRoleAPI_resp == 200 , "update Role API fialed"
+
+    #delete Role API
+    deleteRoleAPI_resp = role_Delete("pah",roleid)
+    assert deleteRoleAPI_resp == 200 , "Delete Role API failed"
+
+def testCRUD_Bill():
+
+    #View Bill List API
+    billListAPI_resp = bill_List()
+    assert billListAPI_resp == 200 , "View Bill List API failed"
+
+    #Create Bill API
+    createBillAPI_resp,billId = bill_Create()
+    assert createBillAPI_resp == 201, "Create Bill API failed"
+
+    #View Bill API
+    viewBillAPI_resp = bill_View(billId)
+    assert viewBillAPI_resp == 200, "View Bill API failed"
+
+    #Update Bill API
+    updateBillAPI_resp = bill_Update("pah",billId)
+    assert updateBillAPI_resp == 200, "update Bill API failed"
