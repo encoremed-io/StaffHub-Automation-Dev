@@ -87,10 +87,10 @@ class ApptListPage():
 
     def verifyApptCreatedAPI(self,createdapptcode):
         #perform login using Requests
-        dataLogin = {"tenantCode" : "pah",
+        dataLogin = {"tenantCode" : "ttish",
                        "username" : USERNAME,
                        "password" : PASSWORD}
-        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/pah/staff/auth/login",json=dataLogin)
+        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/auth/login",json=dataLogin)
 
         #get the JSON response body
         r_response = r.json()
@@ -100,13 +100,13 @@ class ApptListPage():
         
         
         patientlistparams = {
-            "tenantCode" : "pah" ,
+            "tenantCode" : "ttish" ,
         }
         # Set the authorization header of the request
         headers = {"Authorization" : f"Bearer {token}"}
 
         #using requests library, retrieve appointment list using API AND store the response
-        r2 = requests.get("https://staffhub-dev.encoremed.io/api/v1/pah/staff/appointment/list", params=patientlistparams, headers=headers)
+        r2 = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/appointment/list", params=patientlistparams, headers=headers)
         data = r2.json()
         # accessing values from the JSON for the latest appointment
         appointmentsdata = data['result']['appointments'][0]
@@ -121,10 +121,10 @@ class ApptListPage():
 
     def retrieveApptID(self,createdapptcode):
         #perform login using Requests
-        dataLogin = {"tenantCode" : "pah",
+        dataLogin = {"tenantCode" : "ttish",
                        "username" : USERNAME,
                        "password" : PASSWORD}
-        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/pah/staff/auth/login",json=dataLogin)
+        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/auth/login",json=dataLogin)
 
         #get the JSON response body
         r_response = r.json()
@@ -134,13 +134,13 @@ class ApptListPage():
         
         
         patientlistparams = {
-            "tenantCode" : "pah" ,
+            "tenantCode" : "ttish" ,
         }
         # Set the authorization header of the request
         headers = {"Authorization" : f"Bearer {token}"}
 
         #using requests library, retrieve appointment list using API AND store the response
-        r2 = requests.get("https://staffhub-dev.encoremed.io/api/v1/pah/staff/appointment/list", params=patientlistparams, headers=headers)
+        r2 = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/appointment/list", params=patientlistparams, headers=headers)
         data = r2.json()
         # accessing values from the JSON for the latest appointment
         appointmentsdata = data['result']['appointments'][0]
@@ -154,10 +154,10 @@ class ApptListPage():
         
     def createPatient(self):
         #perform login using Requests
-        dataLogin = {"tenantCode" : "pah",
+        dataLogin = {"tenantCode" : "ttish",
                        "username" : USERNAME,
                        "password" : PASSWORD}
-        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/pah/staff/auth/login",json=dataLogin)
+        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/auth/login",json=dataLogin)
 
         #get the JSON response body
         r_response = r.json()
@@ -166,7 +166,7 @@ class ApptListPage():
         token=r_response["result"]["token"]
         
         patientdata = {
-            "tenantCode" : "pah" ,
+            "tenantCode" : "ttish" ,
             "name" : "Ishlah Test Auto",
             "identityNo" : 50505050
         }
@@ -175,7 +175,7 @@ class ApptListPage():
         headers = {"Authorization" : f"Bearer {token}"}
 
         #using requests library, create patient data using API AND store the response
-        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/pah/staff/patient/create", data=patientdata, headers=headers)
+        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/patient/create", data=patientdata, headers=headers)
 
         if r.status_code == 201:
             print("Patient successfully created! : \n", r.json())
@@ -184,10 +184,10 @@ class ApptListPage():
 
     def retrievePatientID(self):
         #perform login using Requests
-        dataLogin = {"tenantCode" : "pah",
+        dataLogin = {"tenantCode" : "ttish",
                        "username" : USERNAME,
                        "password" : PASSWORD}
-        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/pah/staff/auth/login",json=dataLogin)
+        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/auth/login",json=dataLogin)
 
         #get the JSON response body
         r_response = r.json()
@@ -197,10 +197,10 @@ class ApptListPage():
         headers = {"Authorization" : f"Bearer {token}"}
         patientlistparam = {
             'keyword' : 'ishlah',
-            'tenantCode' : 'pah'
+            'tenantCode' : 'ttish'
         }
         #using requests library, call patient list using API AND store the response
-        resp = requests.get("https://staffhub-dev.encoremed.io/api/v1/pah/staff/patient/list", params=patientlistparam, headers=headers)
+        resp = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/patient/list", params=patientlistparam, headers=headers)
         data = resp.json()
         # accessing values from the JSON
         patient = data["result"]["patients"]
@@ -217,10 +217,10 @@ class ApptListPage():
     
     def deletepatient(self,patientID):
         #perform login using Requests
-        dataLogin = {"tenantCode" : "pah",
+        dataLogin = {"tenantCode" : "ttish",
                        "username" : USERNAME,
                        "password" : PASSWORD}
-        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/pah/staff/auth/login",json=dataLogin)
+        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/auth/login",json=dataLogin)
 
         #get the JSON response body
         r_response = r.json()
@@ -229,11 +229,11 @@ class ApptListPage():
         # Set the authorization header of the request
         headers = {"Authorization" : f"Bearer {token}"}
         deletepatientdata = {
-            'tenantCode' : 'pah',
+            'tenantCode' : 'ttish',
             'patientId' : patientID
         }
         #using requests library, perform delete patient API call AND store the response
-        resp = requests.delete("https://staffhub-dev.encoremed.io/api/v1/pah/staff/patient/delete", data=deletepatientdata, headers=headers)
+        resp = requests.delete("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/patient/delete", data=deletepatientdata, headers=headers)
         data = resp.json()
 
         #print("this is delete API response :", data)
@@ -245,10 +245,10 @@ class ApptListPage():
 
     def cancelLatestAppt(self,apptID):
         #perform login using Requests
-        dataLogin = {"tenantCode" : "pah",
+        dataLogin = {"tenantCode" : "ttish",
                        "username" : USERNAME,
                        "password" : PASSWORD}
-        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/pah/staff/auth/login",json=dataLogin)
+        r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/auth/login",json=dataLogin)
 
         #get the JSON response body
         r_response = r.json()
@@ -258,10 +258,10 @@ class ApptListPage():
         headers = {"Authorization" : f"Bearer {token}"}
         cancelapptdata = {
             'appointmentId' : apptID,
-            'tenantCode' : 'pah'
+            'tenantCode' : 'ttish'
         }
         #using requests library, perform delete patient API call AND store the response
-        resp = requests.put("https://staffhub-dev.encoremed.io/api/v1/pah/staff/appointment/cancel", data=cancelapptdata, headers=headers)
+        resp = requests.put("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/appointment/cancel", data=cancelapptdata, headers=headers)
         data = resp.json()
         #print("this is API response for cancel appointment:", data)
 

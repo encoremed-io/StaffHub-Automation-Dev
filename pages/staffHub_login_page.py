@@ -34,22 +34,22 @@ class LoginPage():
         #assert correct page URL
         element = WebDriverWait(self.driver1, 20).until(EC.visibility_of_element_located((By.XPATH,"//img[@class='q-mr-md']")))
         current_url = self.driver1.current_url
-        expected_url = 'https://staffhub-dev.encoremed.io/pah/dashboard'
+        expected_url = 'https://staffhub-dev.encoremed.io/ttish/dashboard'
         assert current_url == expected_url, "ExpectedURL is "+expected_url+" but got "+ current_url
         print ("successfully logged in to correct page")
 
     def verifyAPIresponse(self,statuscode):
-        API_ENDPOINT = "https://staffhub-dev.encoremed.io/api/v1/pah/staff/auth/login"
+        API_ENDPOINT = "https://staffhub-dev.encoremed.io/api/v1/ttish/staff/auth/login"
         r = requests.post(API_ENDPOINT)
         print(r.status_code)
         assert (statuscode == r.status_code)
         print("Response status code is ",r.status_code)
 
     def verifyStaffName(self,staffname):
-        dataLogin = {"tenantCode" : "pah",
+        dataLogin = {"tenantCode" : "ttish",
                        "username" : USERNAME,
                        "password" : PASSWORD}
-        API_ENDPOINT = "https://staffhub-dev.encoremed.io/api/v1/pah/staff/auth/login"
+        API_ENDPOINT = "https://staffhub-dev.encoremed.io/api/v1/ttish/staff/auth/login"
         r= requests.post(API_ENDPOINT,json=dataLogin)
         #get the JSON response body
         r_response = r.json()

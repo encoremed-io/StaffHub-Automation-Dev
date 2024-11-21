@@ -13,7 +13,7 @@ def setup(request):
     driver1 = webdriver.Chrome()
     driver1.maximize_window()
     driver1.implicitly_wait(10)
-    driver1.get("https://staffhub-dev.encoremed.io/pah/auth/login")
+    driver1.get("https://staffhub-dev.encoremed.io/ttish/auth/login")
     wait = WebDriverWait(driver1,10)
 
 

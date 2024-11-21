@@ -13,7 +13,7 @@ class OverviewPage():
 
     def verifyApptOverviewBtn(self):
         #assert Appointment Overview Button can be seen
-        apptOverviewButton = self.driver1.find_element(By.XPATH,"//a [@href='/pah/appointment/overview']")
+        apptOverviewButton = self.driver1.find_element(By.XPATH,"//a [@href='/ttish/appointment/overview']")
         if apptOverviewButton.is_displayed():
             print ("Appointment Overview Button is found")
         else:
@@ -23,7 +23,7 @@ class OverviewPage():
     
     def verifyVisitOverviewBtn(self):
          #assert Visit Overview button can be seen
-        visitOverviewButton = self.driver1.find_element(By.XPATH,"//a [@href='/pah/visit']")
+        visitOverviewButton = self.driver1.find_element(By.XPATH,"//a [@href='/ttish/visit']")
         if visitOverviewButton.is_displayed():
             print ("Visit Overview Button is found")
         else:
@@ -64,23 +64,23 @@ class OverviewPage():
 
     def apptOverviewButtonClick(self):
         #click on Appointment Overview Button
-        self.driver1.find_element(By.XPATH,"//a [@href='/pah/appointment/overview']").click()
+        self.driver1.find_element(By.XPATH,"//a [@href='/ttish/appointment/overview']").click()
         #wait until correct page appears
         element = WebDriverWait(self.driver1, 20).until(EC.visibility_of_element_located((By.XPATH,"//div[@class='n-switch__button']")))
         #assert clicking button redirects user to the correct page
         current_url = self.driver1.current_url
-        expected_url = 'https://staffhub-dev.encoremed.io/pah/appointment/overview'
+        expected_url = 'https://staffhub-dev.encoremed.io/ttish/appointment/overview'
         assert current_url == expected_url , 'expected URL is '+expected_url+ 'but current URL is '+current_url
         print("Appointment Overview button CTA assertion passed")
 
     def visitOverviewButtonClick(self):
         #click on Appointment Overview Button
-        self.driver1.find_element(By.XPATH,"//a [@href='/pah/visit']").click()
+        self.driver1.find_element(By.XPATH,"//a [@href='/ttish/visit']").click()
         #wait until correct page appears
         element = WebDriverWait(self.driver1, 20).until(EC.visibility_of_element_located((By.XPATH,"//span[contains(text(),'New Visit')]")))
         #assert clicking button redirects user to the correct page
         current_url = self.driver1.current_url
-        expected_url = 'https://staffhub-dev.encoremed.io/pah/visit'
+        expected_url = 'https://staffhub-dev.encoremed.io/ttish/visit'
         assert current_url == expected_url , 'expected URL is '+expected_url+ 'but current URL is '+current_url
         print("Visit Overview button CTA assertion passed")
 
@@ -91,7 +91,7 @@ class OverviewPage():
         element = WebDriverWait(self.driver1, 20).until(EC.visibility_of_element_located((By.XPATH,"//div[contains(text(),'List Of Patient')]")))
         #assert clicking button redirects user to the correct page
         current_url = self.driver1.current_url
-        expected_url = 'https://staffhub-dev.encoremed.io/pah/patient/list'
+        expected_url = 'https://staffhub-dev.encoremed.io/ttish/patient/list'
         assert current_url == expected_url , 'expected URL is '+expected_url+ 'but current URL is '+current_url
         print("Patient button CTA assertion passed")
 
