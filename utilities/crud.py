@@ -40,7 +40,7 @@ def authentication_Forgot_Password():
 
     return r.status_code
 
-
+#Staff: Doctor API
 
 def doctor_Create():
     token = authentication_Login()
@@ -337,8 +337,8 @@ def appointment_Create():
     createapptjson = {
     "tenantCode" : tenantCode,
     "patient": {
-        "name": "auto appointment creation patient"
-    },
+        "name": "auto appointment creation patient" 
+    }, #doctor viktor
     "doctorId": "8474adad-aa86-4a8e-b0ed-918024d21f82",
     "startAt": iso_time
 }
@@ -954,5 +954,696 @@ def doctor_CalendarEvent_Delete(calendarEventId):
 
     return r.status_code
 
+#Staff: Service Calendar API
+
+def service_Calendar_List(serviceId,month,year):
+    token = authentication_Login()
+    svcCalendarListParams = {
+        "tenantCode" : tenantCode ,
+        "serviceId" : serviceId,
+        "month" : month,
+        "year" : year
+    }
+
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/calendar/list", params=svcCalendarListParams, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 200:
+        print("Service Calendar list successfully retrieved! : \n", r_response)
+
+    else:
+        print("Service Calendar list unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
+
+def service_Calendar_Appointment(serviceId,month,year):
+    token = authentication_Login()
+    svcCalendarApptsParams = {
+        "tenantCode" : tenantCode ,
+        "serviceIds" : {serviceId},
+        "month" : month,
+        "year" : year
+    }
+
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/calendar/appointment", params=svcCalendarApptsParams, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 200:
+        print("Service Calendar appointments successfully retrieved! : \n", r_response)
+
+    else:
+        print("Service Calendar appointments unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
+
+def service_Calendar_timeslot(serviceId,branchId):
+    token = authentication_Login()
+    date_now = datetime.now()
+    selectedDate = date_now.strftime("%Y-%m-%d")
+    svcCalendarTimeslotParams = {
+        "tenantCode" : tenantCode ,
+        "serviceIds" : {serviceId},
+        "branchId" : branchId,
+        "selectedDate" : selectedDate
+    }
+
+    # Set the authorization header of the request
+
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/calendar/timeslot", params=svcCalendarTimeslotParams, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 200:
+        print("Service Calendar timeslot successfully retrieved! : \n", r_response)
+
+    else:
+        print("ServiceCalendar timeslot unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
+
+def service_Calendar_AvailableTimeslot(serviceId,branchId):
+    token = authentication_Login()
+    date_now = datetime.now()
+    selectedDate = date_now.strftime("%Y-%m-%d")
+    availabletimeslotparams = {
+        "tenantCode" : tenantCode ,
+        "serviceIds" : {serviceId},
+        "branchId" : branchId,
+        "selectedDate" : selectedDate
+    }
+
+    # Set the authorization header of the request
+
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/calendar/availabletimeslot", params=availabletimeslotparams, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 200:
+        print("service available timeslot successfully retrieved! : \n", r_response)
+
+    else:
+        print("service available timeslot unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
+
+#Staff: Service API
+
+def service_Create():
+    token = authentication_Login()
+    createservicedata = {
+            "tenantCode" : tenantCode ,
+            "name" : "Automation Service Ishlah" ,
+            "code" : "AUTOService1" ,
+            "branchIds" : "5608b972-2f93-4330-a2e8-83bad4c9fa84" #Default Branch
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, create service using API AND store the response
+    r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/create", data=createservicedata, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 201:
+            print("Service successfully created! : \n", r_response)
+            serviceid = r_response["result"]["service"]["id"]
+            servicename = r_response ["result"]["service"]["name"]
+            print("Service ID : ", serviceid)
+            print("Service Name : ",servicename)
+    else: 
+            print("Service unsuccessfully failed: \n", r.status_code, r.text)
 
 
+    return r.status_code,serviceid
+
+def service_View(serviceId:str):
+    token = authentication_Login()
+    viewServiceParams = {
+            "tenantCode" : tenantCode ,
+            "serviceId" : serviceId
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve doctor details using API AND store the response
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/view", params=viewServiceParams, headers=headers)
+
+    if r.status_code == 200:
+            print("Service details successfully retrieved! : \n", r.json())
+    else:
+            print("Service details unsuccessfully retrieved! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def service_Update(serviceId:str):
+    token = authentication_Login()
+    updateServiceData = {
+            "tenantCode" : tenantCode ,
+            "serviceId" : serviceId,
+            "name" : "update service auto",
+            "code" : "AUTOHEHE",
+            "branchIds" : "5608b972-2f93-4330-a2e8-83bad4c9fa84"
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, update service using API AND store the response
+    r = requests.put("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/update", data=updateServiceData, headers=headers)
+
+    if r.status_code == 200:
+            print("Service details successfully updated! : \n", r.json())
+    else:
+            print("Service details unsuccessfully updated! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def service_Delete(serviceId:str):
+    token = authentication_Login()
+    deleteservicedata = {
+            "tenantCode" : tenantCode ,
+            "serviceId" : serviceId
+        }
+     # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, delete doctor using API AND store the response
+    r = requests.delete("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/delete", data=deleteservicedata, headers=headers)
+
+    if r.status_code == 200:
+            print("service successfully deleted! : \n", r.json())
+    else:
+            print("service unsuccessfully deleted! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+#Staff: Service Calendar Event API
+
+def Service_CalendarEvent_List(serviceId):
+    token = authentication_Login()
+    svcCalendarEventListParams = {
+        "tenantCode" : tenantCode ,
+        "serviceId" : serviceId
+    }
+
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/calendarEvent/list", params=svcCalendarEventListParams, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 200:
+        print("Service Calendar Event list successfully retrieved! : \n", r_response)
+
+    else:
+        print("Service Calendar Event list unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
+
+def service_CalendarEvent_Create(serviceId,eventName):
+    token = authentication_Login()
+    #get current system time
+    current_time = datetime.now()
+    #Convert the date to ISO format
+    iso_time = current_time.isoformat()
+    svccreatecalendareventdata = {
+        "tenantCode" : tenantCode ,
+        "serviceId" : serviceId,
+        "name" : eventName,
+        "action" : "BLOCK", #hex OR RGB formatting
+        "startDate" : iso_time,
+        "value" : "1",
+        "type": "SPECIFIC"
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/calendarevent/create", data=svccreatecalendareventdata, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 201:
+        print("Service Calendar Event successfully created! : \n", r_response)
+        calendareventId = r_response["result"]["serviceCalendarEvent"]["id"]
+        print("Service Calendar Event ID : ", calendareventId)
+
+    else:
+        print("Service Calendar Event unsuccessfully created: \n", r.status_code, r.text)
+
+    return r.status_code,calendareventId
+
+def service_CalendarEvent_View(calendarEventId):
+    token = authentication_Login()
+    viewcalendareventparams = {
+        "tenantCode" : tenantCode ,
+        "serviceCalendarEventId" : calendarEventId
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/calendarevent/view", params=viewcalendareventparams, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 200:
+        print("Service Calendar Event successfully retrieved! : \n", r_response)
+
+    else:
+        print("Service Calendar Event unsuccessfully retrieved! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def service_CalendarEvent_Update(calendarEventId,tagname):
+    token = authentication_Login()
+    #get current system time
+    current_time = datetime.now()
+    #Convert the date to ISO format
+    iso_time = current_time.isoformat()
+    updatecalendareventdata = {
+            "tenantCode" : tenantCode ,
+            "serviceCalendarEventId" : calendarEventId ,
+            "startDate" : iso_time,
+            "value" : "1",
+            "name" : tagname   
+        }
+     # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.put("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/calendarevent/update", data=updatecalendareventdata, headers=headers)
+    if r.status_code == 200:
+            print("service Calendar Event successfully updated! : \n", r.json())
+    else:
+            print("service Calendar Event unsuccessfully updated! : \n", r.status_code, r.text)
+    return r.status_code
+
+def service_CalendarEvent_Delete(calendarEventId):
+    token = authentication_Login()
+    deletecalendareventdata = {
+            "tenantCode" : tenantCode ,
+            "serviceCalendarEventId" : calendarEventId    
+        }
+     # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.delete("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/service/calendarevent/delete", data=deletecalendareventdata, headers=headers)
+    if r.status_code == 200:
+            print("Service Calendar Event successfully deleted! : \n", r.json())
+    else:
+            print("Service Calendar Event unsuccessfully deleted! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+#Staff: Doctor Calendar API
+def doctor_Calendar_List(doctorId,month,year):
+    token = authentication_Login()
+    docCalendarListParams = {
+        "tenantCode" : tenantCode ,
+        "doctorId" : doctorId,
+        "month" : month,
+        "year" : year
+    }
+
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/doctor/calendar/list", params=docCalendarListParams, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 200:
+        print("Calendar list successfully retrieved! : \n", r_response)
+
+    else:
+        print("Calendar list unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
+
+def doctor_Calendar_Appointment(doctorId,month,year):
+    token = authentication_Login()
+    docCalendarApptsParams = {
+        "tenantCode" : tenantCode ,
+        "doctorIds" : {doctorId},
+        "month" : month,
+        "year" : year
+    }
+
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/doctor/calendar/appointment", params=docCalendarApptsParams, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 200:
+        print("Calendar appointments successfully retrieved! : \n", r_response)
+
+    else:
+        print("Calendar appointments unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
+
+def doctor_Calendar_timeslot(doctorId,branchId):
+    token = authentication_Login()
+    date_now = datetime.now()
+    selectedDate = date_now.strftime("%Y-%m-%d")
+    docCalendarTimeslotParams = {
+        "tenantCode" : tenantCode ,
+        "doctorIds" : {doctorId},
+        "branchId" : branchId,
+        "selectedDate" : selectedDate
+    }
+
+    # Set the authorization header of the request
+
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/doctor/calendar/timeslot", params=docCalendarTimeslotParams, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 200:
+        print("Calendar timeslot successfully retrieved! : \n", r_response)
+
+    else:
+        print("Calendar timeslot unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
+
+def doctor_Calendar_AvailableTimeslot(doctorId,branchId):
+    token = authentication_Login()
+    date_now = datetime.now()
+    selectedDate = date_now.strftime("%Y-%m-%d")
+    availabletimeslotparams = {
+        "tenantCode" : tenantCode ,
+        "doctorIds" : {doctorId},
+        "branchId" : branchId,
+        "selectedDate" : selectedDate
+    }
+
+    # Set the authorization header of the request
+
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/doctor/calendar/availabletimeslot", params=availabletimeslotparams, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 200:
+        print("available timeslot successfully retrieved! : \n", r_response)
+
+    else:
+        print("available timeslot unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
+
+#Staff: Queue Screen API
+
+def queue_Screen_List():
+    token = authentication_Login()
+    QSlistparams = {
+        "tenantCode" : tenantCode 
+    }
+
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/queueScreen/list", params=QSlistparams, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 200:
+        print("Queue Screen list successfully retrieved! : \n", r_response)
+
+    else:
+        print("Queue Screen list unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
+
+def queue_Screen_Create(qsName,doctorId,qsUsername,qsPassword,status):
+    token = authentication_Login()
+    qsCreateData = {
+        "tenantCode" : tenantCode ,
+        "name" : qsName,
+        "doctorIds" : {doctorId},
+        "username" : qsUsername,
+        "password" : qsPassword, 
+        "status" : status
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/queueScreen/create", data=qsCreateData, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 201:
+        print("Queue Screen successfully created! : \n", r_response)
+        queueScreenId = r_response["result"]["queueScreen"]["id"]
+        print("queue Screen ID : ", queueScreenId)
+
+    else:
+        print("Queue Screen unsuccessfully created: \n", r.status_code, r.text)
+
+    return r.status_code,queueScreenId
+
+def queue_Screen_View(qsid):
+    token = authentication_Login()
+    viewQSParams = {
+            "queueScreenId" : qsid,
+            "tenantCode" : tenantCode 
+            
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve doctor details using API AND store the response
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/queueScreen/view", params=viewQSParams, headers=headers)
+
+    if r.status_code == 200:
+            print("queue Screen successfully retrieved! : \n", r.json())
+    else:
+            print("queue Screen unsuccessfully retrieved! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def queue_Screen_Update(queueScreenId,status):
+    token = authentication_Login()
+    qsUpdateData = {
+            "tenantCode" : tenantCode ,
+            "queueScreenId" : queueScreenId,
+            "status" : status,
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, update service using API AND store the response
+    r = requests.put("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/queueScreen/update", data=qsUpdateData, headers=headers)
+
+    if r.status_code == 200:
+            print("queue Screen details successfully updated! : \n", r.json())
+    else:
+            print("queue Screen details unsuccessfully updated! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def queue_Screen_Delete(queueScreenId):
+    token = authentication_Login()
+    deleteQSdata = {
+            "tenantCode" : tenantCode ,
+            "queueScreenId" : queueScreenId
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve doctor details using API AND store the response
+    r = requests.delete("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/queueScreen/delete", data=deleteQSdata, headers=headers)
+
+    if r.status_code == 200:
+            print("queue Screen successfully deleted! : \n", r.json())
+    else:
+            print("queue Screen unsuccessfully deleted! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+#Staff: Queue API
+
+def queue_Create(queueName):
+    token = authentication_Login()
+    queueCreateData = {
+        "tenantCode" : tenantCode ,
+        "name" : queueName,
+        "isPrimary" : "true"
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/queue/create", data=queueCreateData, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 201:
+        print("Queue successfully created! : \n", r_response)
+        queueId = r_response["result"]["queue"]["id"]
+        print("queue ID : ", queueId)
+
+    else:
+        print("Queue unsuccessfully created: \n", r.status_code, r.text)
+
+    return r.status_code,queueId
+
+def queue_View(queueId):
+    token = authentication_Login()
+    viewQueueParams = {
+            "queueId" : queueId,
+            "tenantCode" : tenantCode 
+            
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve doctor details using API AND store the response
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/queue/view", params=viewQueueParams, headers=headers)
+
+    if r.status_code == 200:
+            print("queue successfully retrieved! : \n", r.json())
+    else:
+            print("queue unsuccessfully retrieved! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def queue_Update(queueId,queueName):
+    token = authentication_Login()
+    queueUpdateData = {
+            "tenantCode" : tenantCode ,
+            "queueId" : queueId,
+            "name" : queueName,
+            "isPrimary" : "TRUE"
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, update service using API AND store the response
+    r = requests.put("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/queue/update", data=queueUpdateData, headers=headers)
+
+    if r.status_code == 200:
+            print("queue details successfully updated! : \n", r.json())
+    else:
+            print("queue details unsuccessfully updated! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def queue_delete(queueId):
+    token = authentication_Login()
+    deleteQdata = {
+            "tenantCode" : tenantCode ,
+            "queueId" : queueId
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve doctor details using API AND store the response
+    r = requests.delete("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/queue/delete", data=deleteQdata, headers=headers)
+
+    if r.status_code == 200:
+            print("queue successfully deleted! : \n", r.json())
+    else:
+            print("queue unsuccessfully deleted! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+#Staff: Kiosk API
+def kiosk_List():
+    token = authentication_Login()
+    kiosklistparams = {
+        "tenantCode" : tenantCode 
+    }
+
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/kiosk/list", params=kiosklistparams, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 200:
+        print("kiosk list successfully retrieved! : \n", r_response)
+
+    else:
+        print("kiosk list unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
+
+def kiosk_Create(kioskName,kioskUsername,kioskPassword):
+    token = authentication_Login()
+    kioskCreateData = {
+        "tenantCode" : tenantCode ,
+        "name" : kioskName,
+        "username" :kioskUsername,
+        "password" : kioskPassword,
+        "status" : "ACTIVE"
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/kiosk/create", data=kioskCreateData, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 201:
+        print("Kiosk successfully created! : \n", r_response)
+        kioskId = r_response["result"]["kiosk"]["id"]
+        print("kiosk ID : ", kioskId)
+
+    else:
+        print("Kiosk unsuccessfully created: \n", r.status_code, r.text)
+
+    return r.status_code,kioskId
+
+
+def kiosk_View(kioskId):
+    token = authentication_Login()
+    viewKioskParams = {
+            "kioskId" : kioskId,
+            "tenantCode" : tenantCode 
+            
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve doctor details using API AND store the response
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/kiosk/view", params=viewKioskParams, headers=headers)
+
+    if r.status_code == 200:
+            print("kiosk successfully retrieved! : \n", r.json())
+    else:
+            print("kiosk unsuccessfully retrieved! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def kiosk_Update(kioskId,kioskName):
+    token = authentication_Login()
+    kioskUpdateData = {
+            "tenantCode" : tenantCode ,
+            "kioskId" : kioskId,
+            "name" : kioskName
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, update service using API AND store the response
+    r = requests.put("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/kiosk/update", data=kioskUpdateData, headers=headers)
+
+    if r.status_code == 200:
+            print("kiosk details successfully updated! : \n", r.json())
+    else:
+            print("kiosk details unsuccessfully updated! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def kiosk_Delete(kioskId):
+    token = authentication_Login()
+    deletekioskdata = {
+            "tenantCode" : tenantCode ,
+            "kioskId" : kioskId
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve doctor details using API AND store the response
+    r = requests.delete("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/kiosk/delete", data=deletekioskdata, headers=headers)
+
+    if r.status_code == 200:
+            print("kiosk successfully deleted! : \n", r.json())
+    else:
+            print("kiosk unsuccessfully deleted! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+
+#Staff: News API
+
+def news_List():
+    return
+
+def news_Create():
+    return
+
+def news_View():
+    return
+
+def news_Update():
+    return
+
+def news_Delete():
+    return
+
+
+#Staff: Holiday API
+
+def holiday_List():
+    return
+
+def holiday_Create():
+    return
+
+def holiday_View():
+    return
+
+def holiday_Update():
+    return
+
+def holiday_Delete():
+    return

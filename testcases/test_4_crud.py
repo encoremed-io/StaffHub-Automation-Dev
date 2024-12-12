@@ -215,3 +215,151 @@ def testCRUD_Doctor_Calendar_Event():
     finally:
         #delete doctor at the end
         doctor_Delete(doctorId)
+
+def testCRUD_Doctor_Calendar():
+
+    try:
+        #pre-requisite - need a doctor first
+        x,doctorId = doctor_Create()
+        
+        #View Doctor Calendar List API
+        assert doctor_Calendar_List(doctorId,11,2024) == 200,"Doctor Calendar List API failed"
+
+        #View Doctor Calendar Appointment API
+        assert doctor_Calendar_Appointment(doctorId,11,2024)==200, "Doctor Calendar Appointment API failed"
+
+        #View Doctor Calendar Timeslot API
+        assert doctor_Calendar_timeslot(doctorId,"5608b972-2f93-4330-a2e8-83bad4c9fa84") == 200, " Doctor Calendar Timeslot API failed"
+
+        #View Doctor Calendar Available Timeslot API
+        assert doctor_Calendar_AvailableTimeslot(doctorId,"5608b972-2f93-4330-a2e8-83bad4c9fa84") == 200, "Doctor Calendar Available Timeslot API failed"
+    finally:
+        #delete doctor
+        doctor_Delete(doctorId)
+
+def testCRUD_Service():
+
+    #Create Service API
+    servicecreateAPI_resp,serviceId = service_Create()
+    assert servicecreateAPI_resp == 201, "Service Create API failed"
+
+    #View Service API
+    serviceviewAPI_resp = service_View(serviceId)
+    assert serviceviewAPI_resp == 200, "Service View API failed"
+
+    #Update Service API
+    serviceupdateAPI_resp = service_Update(serviceId)
+    assert serviceupdateAPI_resp == 200, "Service Update API failed"
+
+    #Delete Service API
+    servicedeleteAPI_resp = service_Delete(serviceId)
+    assert servicedeleteAPI_resp == 200, "Service Delete API failed"    
+
+def testCRUD_Service_Calendar_Event():
+        
+    #pre-requisite : Service ID is required. 
+    x,serviceId = service_Create()
+
+    try:
+        #View Service Calendar Event List API
+        calendarEventListAPI_resp = Service_CalendarEvent_List(serviceId)
+        assert calendarEventListAPI_resp == 200,"View Service Calendar Event List API failed"
+
+        #Create Service Calendar Event API
+        createCalendarEventAPI_resp, calendarEventId = service_CalendarEvent_Create(serviceId,"auto Calendar Event")
+        assert createCalendarEventAPI_resp== 201, "Create Service Calendar Event API failed"
+
+        #View Service Calendar Event API
+        viewCalendarEventAPI_resp = service_CalendarEvent_View(calendarEventId)
+        assert viewCalendarEventAPI_resp == 200, "View Service Calendar Event API failed"
+
+        #Update Service Calendar Event API
+        updateCalendarEventAPI_resp = service_CalendarEvent_Update(calendarEventId,"updated Service Calendar Event")
+        assert updateCalendarEventAPI_resp == 200, "Update Service Calendar Event API failed"
+        
+        #Delete Service Calendar Event API
+        deleteCalendarEventAPI_resp = service_CalendarEvent_Delete(calendarEventId)
+        assert deleteCalendarEventAPI_resp == 200,"Delete service Calendar Event API failed"
+    finally:
+        #delete Service at the end
+        service_Delete(serviceId)
+
+def testCRUD_Service_Calendar():
+
+    try:
+        #pre-requisite - need a service first
+        x,serviceId = service_Create()
+        
+        #View Service Calendar List API
+        assert service_Calendar_List(serviceId,11,2024) == 200,"Service Calendar List API failed"
+
+        #View Service Calendar Appointment API
+        assert service_Calendar_Appointment(serviceId,11,2024)==200, "Service Calendar Appointment API failed"
+
+        #View Service Calendar Timeslot API
+        assert service_Calendar_timeslot(serviceId,"5608b972-2f93-4330-a2e8-83bad4c9fa84")==200, " Service Calendar Timeslot API failed"
+
+        #View Service Calendar Available Timeslot API
+        assert service_Calendar_AvailableTimeslot(serviceId,"5608b972-2f93-4330-a2e8-83bad4c9fa84") ==200, "Service Calendar Available Timeslot API failed"
+    finally:
+        #delete Service
+        service_Delete(serviceId)
+
+
+def testCRUD_Queue_Screen():
+    try:
+        #pre-requisite : doctor
+        x,doctorId=doctor_Create()
+        #View Queue Screen List API
+        assert queue_Screen_List() == 200,"Queue Screen List API failed"
+
+        #Create Queue Screen API
+        createqueuescreenAPI_resp,queueScreenId= queue_Screen_Create("auto queue screen",doctorId,"ishlahQS","1Aaaaaaa","ACTIVE")
+        assert createqueuescreenAPI_resp == 201,"Create Queue Screen API failed"
+        #View Queue Screen API
+        assert queue_Screen_View(queueScreenId) == 200, " View Queue Screen API failed"
+
+        #Update Queue Screen API
+        assert queue_Screen_Update(queueScreenId,"INACTIVE") == 200, "update Queue Screen API failed"
+
+        #Delete Queue Screen API
+        assert queue_Screen_Delete(queueScreenId)==200,"Delete Queue Screen API failed"
+    
+    finally:
+        doctor_Delete(doctorId)
+        
+def testCRUD_Queue():
+
+    #Create Queue API
+    createQueueAPI_resp,queueId = queue_Create("Auto Queue")
+    assert createQueueAPI_resp==201,"Create Queue API failed"
+
+    #View Queue API
+    assert queue_View(queueId) == 200, "View Queue API failed"
+
+    #Update Queue API
+    updateQueueAPI_resp = queue_Update(queueId,"updated Auto Queue")
+    assert updateQueueAPI_resp == 200, "Update Queue API failed"
+
+    #Delete Queue API
+    deleteQueueAPI_resp = queue_delete(queueId)
+    assert deleteQueueAPI_resp == 200, "Delete Queue API failed"
+
+def testCRUD_Kiosk():
+
+    #Kiosk List API
+    assert kiosk_List() == 200,"Kiosk List API failed"
+
+    #Create Kiosk List API
+    createKioskAPI_resp,kioskId = kiosk_Create("Auto Kiosk",username,password)
+    assert createKioskAPI_resp == 201, "create Kiosk API failed"
+    
+    #View Kiosk API
+    assert kiosk_View(kioskId) == 200, "View Kiosk API failed"
+
+    #Update Kiosk API
+    updateKioskAPI_resp = kiosk_Update(kioskId,"updated auto kiosk")
+    assert updateKioskAPI_resp == 200, "Update Kiosk API failed"
+
+    #Delete Kiosk API
+    assert kiosk_Delete(kioskId) == 200, "Delete Kiosk API failed"
