@@ -1616,34 +1616,199 @@ def kiosk_Delete(kioskId):
 #Staff: News API
 
 def news_List():
-    return
+    token = authentication_Login()
+    newslistparams = {
+        "tenantCode" : tenantCode 
+    }
 
-def news_Create():
-    return
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/news/list", params=newslistparams, headers=headers)
+    r_response = r.json()
 
-def news_View():
-    return
+    if r.status_code == 200:
+        print("news list successfully retrieved! : \n", r_response)
 
-def news_Update():
-    return
+    else:
+        print("news list unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
 
-def news_Delete():
-    return
+def news_Create(news_title,news_body):
+    token = authentication_Login()
+    newscreatedata = {
+        "tenantCode" : tenantCode ,
+        "title" : news_title,
+        "body" :news_body
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/news/create", data=newscreatedata, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 201:
+        print("News successfully created! : \n", r_response)
+        newsId = r_response["result"]["news"]["id"]
+        print("News ID : ", newsId)
+
+    else:
+        print("Kiosk unsuccessfully created: \n", r.status_code, r.text)
+
+    return r.status_code,newsId
+
+def news_View(newsId):
+    token = authentication_Login()
+    viewNewsParams = {
+            "tenantCode": tenantCode,
+            "newsId" : newsId
+            
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve doctor details using API AND store the response
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/news/view", params=viewNewsParams, headers=headers)
+
+    if r.status_code == 200:
+            print("news successfully retrieved! : \n", r.json())
+    else:
+            print("news unsuccessfully retrieved! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def news_Update(newsId,news_title):
+    token = authentication_Login()
+    newsupdatedata = {
+            "tenantCode" : tenantCode ,
+            "newsId" : newsId,
+            "title" : news_title
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, update service using API AND store the response
+    r = requests.put("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/news/update", data=newsupdatedata, headers=headers)
+
+    if r.status_code == 200:
+            print("news details successfully updated! : \n", r.json())
+    else:
+            print("news details unsuccessfully updated! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def news_Delete(newsId):
+    token = authentication_Login()
+    deletenewsdata = {
+            "tenantCode" : tenantCode ,
+            "newsId" : newsId
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve doctor details using API AND store the response
+    r = requests.delete("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/news/delete", data=deletenewsdata, headers=headers)
+
+    if r.status_code == 200:
+            print("news successfully deleted! : \n", r.json())
+    else:
+            print("news unsuccessfully deleted! : \n", r.status_code, r.text)
+
+    return r.status_code
 
 
 #Staff: Holiday API
 
-def holiday_List():
-    return
+def holiday_List(year):
+    token = authentication_Login()
+    holidaylistparams = {
+        "tenantCode" : tenantCode,
+        "year" : year
+    }
 
-def holiday_Create():
-    return
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/holiday/list", params=holidaylistparams, headers=headers)
+    r_response = r.json()
 
-def holiday_View():
-    return
+    if r.status_code == 200:
+        print("holiday list successfully retrieved! : \n", r_response)
 
-def holiday_Update():
-    return
+    else:
+        print("holiday list unsuccessfully retrieved: \n", r.status_code, r.text)
+    return r.status_code
 
-def holiday_Delete():
-    return
+def holiday_Create(holiday_name,holiday_date,branchId):
+    token = authentication_Login()
+    holidaycreatedata = {
+        "tenantCode" : tenantCode ,
+        "name" : holiday_name,
+        "selectedDate" :holiday_date,
+        "status" : "ACTIVE",
+        "branchIds" : {branchId}
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    r = requests.post("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/holiday/create", data=holidaycreatedata, headers=headers)
+    r_response = r.json()
+
+    if r.status_code == 201:
+        print("Holiday successfully created! : \n", r_response)
+        holidayId = r_response["result"]["holiday"]["id"]
+        print("Holiday ID : ", holidayId)
+
+    else:
+        print("Holiday unsuccessfully created: \n", r.status_code, r.text)
+
+    return r.status_code,holidayId
+
+def holiday_View(holidayId):
+    token = authentication_Login()
+    viewholidayparams = {
+            "tenantCode": tenantCode,
+            "holidayId" : holidayId
+            
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve doctor details using API AND store the response
+    r = requests.get("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/holiday/view", params=viewholidayparams, headers=headers)
+
+    if r.status_code == 200:
+            print("holiday successfully retrieved! : \n", r.json())
+    else:
+            print("holiday unsuccessfully retrieved! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def holiday_Update(holidayId,holiday_name):
+    token = authentication_Login()
+    holidayupdatedata = {
+            "tenantCode" : tenantCode ,
+            "holidayId" : holidayId,
+            "name" : holiday_name
+    }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, update service using API AND store the response
+    r = requests.put("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/holiday/update", data=holidayupdatedata, headers=headers)
+
+    if r.status_code == 200:
+            print("holiday details successfully updated! : \n", r.json())
+    else:
+            print("holiday details unsuccessfully updated! : \n", r.status_code, r.text)
+
+    return r.status_code
+
+def holiday_Delete(holidayId):
+    token = authentication_Login()
+    deleteholidaydata = {
+            "tenantCode" : tenantCode ,
+            "holidayId" : holidayId
+        }
+    # Set the authorization header of the request
+    headers = {"Authorization" : f"Bearer {token}"}
+    #using requests library, retrieve doctor details using API AND store the response
+    r = requests.delete("https://staffhub-dev.encoremed.io/api/v1/ttish/staff/holiday/delete", data=deleteholidaydata, headers=headers)
+
+    if r.status_code == 200:
+            print("holiday successfully deleted! : \n", r.json())
+    else:
+            print("holiday unsuccessfully deleted! : \n", r.status_code, r.text)
+
+    return r.status_code

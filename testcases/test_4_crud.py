@@ -363,3 +363,41 @@ def testCRUD_Kiosk():
 
     #Delete Kiosk API
     assert kiosk_Delete(kioskId) == 200, "Delete Kiosk API failed"
+
+def testCRUD_News():
+
+    #News List API
+    assert news_List() == 200,"News List API failed"
+
+    #Create News API
+    createNewsAPI_resp,newsId = news_Create("Auto News Title","Auto News Body")
+    assert createNewsAPI_resp == 201, "create News API failed"
+    
+    #View News API
+    assert news_View(newsId) == 200, "View News API failed"
+
+    #Update News API
+    updateNewsAPI_resp = news_Update(newsId,"Updated Auto News Title")
+    assert updateNewsAPI_resp == 200, "Update News API failed"
+
+    #Delete Kiosk API
+    assert news_Delete(newsId) == 200, "Delete News API failed"
+
+def testCRUD_Holiday():
+
+    #Holiday List API
+    assert holiday_List("2024") == 200,"News List API failed"
+
+    #Create Holiday API
+    createHolidayAPI_resp,holidayId = holiday_Create("test Auto holiday","2024-12-16","5608b972-2f93-4330-a2e8-83bad4c9fa84") #date format yyyy-mm-dd , branch ID here is for the default branch in TTISH
+    assert createHolidayAPI_resp == 201, "create holiday API failed"
+    
+    #View Holiday API
+    assert holiday_View(holidayId) == 200, "View holiday API failed"
+
+    #Update Holiday API
+    updateHolidayAPI_resp = holiday_Update(holidayId,"Updated Auto Holiday Title")
+    assert updateHolidayAPI_resp == 200, "Update Holiday API failed"
+
+    #Delete Holiday API
+    assert holiday_Delete(holidayId) == 200, "Delete Holiday API failed"
