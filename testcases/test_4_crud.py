@@ -31,7 +31,7 @@ def testCRUD_Doctor():
 def testCRUD_Patient():
     
     #create patient API
-    createPatientAPI_resp,patientId = patient_Create()
+    createPatientAPI_resp,patientId = patient_Create("test patient ishla auto","555555555")
     assert createPatientAPI_resp == 201 , "Create Patient API failed"
 
     #view (read) patient API
@@ -138,6 +138,7 @@ def testCRUD_Role():
     #delete Role API
     deleteRoleAPI_resp = role_Delete(roleid)
     assert deleteRoleAPI_resp == 200 , "Delete Role API failed"
+
 
 def testCRUD_Bill():
 
@@ -401,3 +402,277 @@ def testCRUD_Holiday():
 
     #Delete Holiday API
     assert holiday_Delete(holidayId) == 200, "Delete Holiday API failed"
+
+def testCRUD_Form():
+    #Form List API
+    assert form_List() == 200,"form List API failed"
+
+    #Create Form API
+    createNewsAPI_resp,formId = form_Create("auto form title")
+    assert createNewsAPI_resp == 201, "create Form API failed"
+    
+    #View Form API
+    assert form_View(formId) == 200, "View Form API failed"
+
+    #Update Form API
+    updateFormAPI_resp = form_Update(formId,"Updated Auto Form Title")
+    assert updateFormAPI_resp == 200, "Update Form API failed"
+
+    #Delete Form API
+    assert form_Delete(formId) == 200, "Delete Form API failed"
+
+# def testCRUD_FormSubmission():
+#     try:
+#         #pre-requisite : Form
+#         x,formId=form_Create("test auto form")
+#         #add item to this form
+#         form_Update(formId,"test auto form title")
+#         #View Form Submission List API
+#         assert formSubmission_List(formId) == 200,"Form Submission List API failed"
+
+#         #Create Form Submission API
+#         createformsubmissionAPI_resp,formSubmissionId= formSubmission_Create(formId)
+#         assert createformsubmissionAPI_resp == 201,"Create Form Submission API failed"
+
+#         #View Form Submission API
+#         assert formSubmission_View(formSubmissionId) == 200, " View Form Submission API failed"
+
+        
+#     finally:
+#         form_Delete(formId)
+
+
+def testCRUD_Daily_Note():
+    #daily note list API
+    assert dailyNote_List() == 200,"daily Note List API failed"
+
+    #Create daily note API
+    createdailynoteAPI_resp,dailyNoteId = dailyNote_Create()
+    assert createdailynoteAPI_resp == 201, "create daily note API failed"
+    
+    #View daily note API
+    assert dailyNote_View(dailyNoteId) == 200, "View daily Note API failed"
+
+    #Update daily Note API
+    updatedailynoteAPI_resp= dailyNote_Update(dailyNoteId)
+    assert updatedailynoteAPI_resp == 200, "Update daily note API failed"
+
+    #Delete daily Note API
+    assert dailyNote_Delete(dailyNoteId) == 200, "Delete daily note API failed"
+
+
+def testCRUD_Location():
+    #location list API
+    assert location_List() == 200,"Location List API failed"
+
+    #Create location API
+    createLocationAPI_resp,locationId = location_Create("Klang")
+    assert createLocationAPI_resp == 201, "create location API failed"
+    
+    #View location API
+    assert location_View(locationId) == 200, "View location API failed"
+
+    #Update location API
+    updateLocationAPI_resp= location_Update(locationId,"Not Klang")
+    assert updateLocationAPI_resp == 200, "Update Location API failed"
+
+    #Delete location API
+    assert location_Delete(locationId) == 200, "Delete location API failed"
+
+def testCRUD_Visit_Type():
+    #pre-requisite : existing doctor/service
+
+    #create visit type API
+    createVisitTypeAPI_resp,visitTypeId = visit_type_Create("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4","Auto Visit Type","AUTO1") #doctor Johnny for TTISH
+    assert createVisitTypeAPI_resp == 201,"Create Visit Type api failed"
+
+    #Visit Type list API
+    assert visit_type_List("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4") == 200,"Visit Type List API failed"
+
+    #visit Type view API
+    assert visit_type_View(visitTypeId) == 200, "Visit Type View API failed"
+
+    #visit Type Update API
+    updateVisitTypeAPI_resp = visit_type_Update(visitTypeId,"NEW auto visit type")
+    assert updateVisitTypeAPI_resp == 200, "Visit Type Update API failed"
+
+    #visit Type Delete API
+    assert visit_type_Delete(visitTypeId) == 200, "Visit Type Delete API failed"
+
+def testCRUD_visitType_Calendar_Event():
+    
+    #pre-requisite : Visit Type ID is required. 
+    x,visitTypeId = visit_type_Create("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4","auto visit","AUTO1") #dr Viktor
+
+    try:
+        #View Visit Type Calendar Event List API
+        vTypeCalendarEventListAPI_resp = visitType_CalendarEvent_List(visitTypeId)
+        assert vTypeCalendarEventListAPI_resp == 200,"View Visit Type Calendar Event List API failed"
+
+        #Create Visit Type Calendar Event API
+        createVTypeCalendarEventAPI_resp, calendarEventId = visitType_CalendarEvent_Create(visitTypeId,"auto Calendar Event")
+        assert createVTypeCalendarEventAPI_resp== 201, "Create visit Type Calendar Event API failed"
+
+        #View visit Type Calendar Event API
+        viewVTypeCalendarEventAPI_resp = visitType_CalendarEvent_View(calendarEventId)
+        assert viewVTypeCalendarEventAPI_resp == 200, "View Visit Type Calendar Event API failed"
+
+        #Update visit Type Calendar Event API
+        updateVTypeCalendarEventAPI_resp = visitType_CalendarEvent_Update(calendarEventId,"updated Visit Type Calendar Event")
+        assert updateVTypeCalendarEventAPI_resp == 200, "Update Visit Type Calendar Event API failed"
+        
+        #Delete visit Type Calendar Event API
+        deleteVTypeCalendarEventAPI_resp = visitType_CalendarEvent_Delete(calendarEventId)
+        assert deleteVTypeCalendarEventAPI_resp == 200,"Delete Visit Type Calendar Event API failed"
+
+    finally:
+        #Delete created visit type
+        visit_type_Delete(visitTypeId)
+
+
+def testCRUD_visitType_Calendar():
+
+    try:
+        #pre-requisite - need a visit type first
+        x,visitTypeId = visit_type_Create("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4","AUTO VISIT","AUTO1")
+        
+        #View Visit Type Calendar List API
+        assert visitType_Calendar_List(visitTypeId,11,2024) == 200,"Visit Type Calendar List API failed"
+
+        #View Visit Type Calendar Appointment API
+        assert visitType_Calendar_Appointment(visitTypeId,11,2024)==200, "Visit Type Calendar Appointment API failed"
+
+        #View Visit Type Calendar Timeslot API
+        assert visitType_Calendar_timeslot(visitTypeId) == 200, " Visit Type Calendar Timeslot API failed"
+
+        #View Visit Type Calendar Available Timeslot API
+        assert visitType_Calendar_AvailableTimeslot(visitTypeId) == 200, "Visit Type Calendar Available Timeslot API failed"
+    finally:
+        #delete Visit Type
+        visit_type_Delete(visitTypeId)
+
+def testCRUD_checkpoint():
+    #checkpoint list API
+    assert checkpoint_List("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4") == 200,"Checkpoint List API failed" #doctor Victor
+
+    #Create checkpoint API
+    createcheckpointAPI_resp,checkpointId = checkpoint_Create("auto checkpoint","CHK1","cfff29cf-2ae6-4669-95fd-e3b3aaa566d4","5608b972-2f93-4330-a2e8-83bad4c9fa84") #Dr Viktor, default branch
+    assert createcheckpointAPI_resp == 201, "create Checkpoint API failed"
+    
+    #View checkpoint API
+    assert checkpoint_View(checkpointId) == 200, "View checkpoint API failed"
+
+    #Update checkpoint API
+    checkpointUpdateAPI_resp= checkpoint_Update(checkpointId,"updated auto checkpoint")
+    assert checkpointUpdateAPI_resp == 200, "Update checkpoint API failed"
+
+    #Delete checkpoint API
+    assert checkpoint_Delete(checkpointId) == 200, "Delete checkpoint API failed"
+
+
+def testCRUD_department():
+    #department list API
+    assert department_List() == 200,"department List API failed"
+
+    #Create daily note API
+    createdepartmentAPI_resp,departmentId = department_Create("Auto Department")
+    assert createdepartmentAPI_resp == 201, "create department API failed"
+    
+    #View department API
+    assert department_View(departmentId) == 200, "View department API failed"
+
+    #Update department API
+    updatedepartmentAPI_resp= department_Update(departmentId,"updated Auto Department")
+    assert updatedepartmentAPI_resp == 200, "Update department API failed"
+
+    #Delete department API
+    assert department_Delete(departmentId) == 200, "Delete department API failed"
+
+
+def testCRUD_report_appointment():
+
+    #Report Appointment Excel API
+    assert report_Appointment_Excel("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4","5608b972-2f93-4330-a2e8-83bad4c9fa84") == 200,"report appointment excel API failed"
+
+    #Report Appointment statistic API
+    assert report_Appointment_Statistic("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4","5608b972-2f93-4330-a2e8-83bad4c9fa84") == 200,"report appointment statistic API failed"
+    
+   #Report Appointment dashboard API
+    assert report_Appointment_Dashboard("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4","5608b972-2f93-4330-a2e8-83bad4c9fa84") == 200,"report appointment excel API failed"
+
+    #Report Appointment Excel API
+    assert report_Appointment_CustomStatus("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4","5608b972-2f93-4330-a2e8-83bad4c9fa84","2024-01-01","2025-01-01") == 200,"report appointment excel API failed" 
+
+
+def testCRUD_report_visit():
+
+    #Report visit MIA summary API
+    assert report_Visit_miaSummary("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4","5608b972-2f93-4330-a2e8-83bad4c9fa84","2024-01-01","2025-01-01") == 200, "Report Visit MIA Summary API failed"
+
+    #Report Queue List API
+    assert report_Visit_QueueList("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4","5608b972-2f93-4330-a2e8-83bad4c9fa84","2024-01-01","2025-01-01") == 200, "Report Visit Queue List API failed"
+
+    #Report visit duration API
+    assert report_Visit_Duration("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4","5608b972-2f93-4330-a2e8-83bad4c9fa84","2024-01-01","2025-01-01") == 200, "Report Visit Duration API failed"
+
+def testCRUD_report_staff():
+
+    #Report appointment Visit Summary API
+    assert report_Staff_ApptVisitSummary("cfff29cf-2ae6-4669-95fd-e3b3aaa566d4","5608b972-2f93-4330-a2e8-83bad4c9fa84","2024-01-01","2025-01-01") == 200, "Report Staff Appointment Visit Summary failed"
+
+def testCRUD_log():
+
+    #audit Log List API
+    assert auditLog_List() == 200, "Audit Log API failed"
+    #Patient Log List API
+    assert patientLog_List("323a4044-0586-43ac-960c-ada39e00a17d") == 200, "Patient Log API failed" #sample patient ID
+ 
+def testCRUD_constant():
+    #creator type list API
+    assert constant_creatorType()==200,"Creator Type List API failed"
+    #Log Audit Actions API 
+    assert constant_logAuditAction()== 200, "Log Audit Actions list API failed"
+    #Log Audit Modules List API
+    assert constant_logAuditModule() == 200, "Log Audit Modules List API failed"
+
+def testCRUD_visit_log():
+    
+    #Visit Log API
+    assert visitLog_List() == 200, "Visit Log API failed"
+
+def testCRUD_appointment_log():
+    
+    #appointment Log API
+    assert appointmentLog_list() == 200, "appointment Log API failed"
+
+def testCRUD_email_log():
+    
+    #Email Log API
+    assert emailLog_List(10,10) == 200, "Email Log API failed"
+
+def testCRUD_SMS_log():
+    
+    #SMS Log API
+    assert smsLog_List(10,10) == 200, "SMS Log API failed"
+
+def testCRUD_integration_log():
+
+    #Integration Log API
+    assert integrationLog_List(10,10)== 200, "Integration Log API failed"
+
+def testCRUD_workflow_log():
+
+    #Workflow Log API
+    assert workflowLog_List(10,10,"APPOINTMENT")==200,"Workflow Log API failed"
+def testCRUD_voucher_log():
+
+    #Voucher Log API
+    assert voucherLog_List(10,10)==200,"Voucher Log API failed"
+
+def testCRUD_branch():
+    #Branch List API
+    assert branch_List()==200,"branch List API failed"
+
+    #branch View API
+    assert branch_View("5608b972-2f93-4330-a2e8-83bad4c9fa84")==200,"branch View API failed" #TTISH default branch
+
