@@ -1,0 +1,51 @@
+name: CI/CD Pipeline
+
+on:
+ repository_dispatch:
+
+  workflow_dispatch:
+  schedule:
+      # Runs every day at 8:00 AM GMT
+      - cron: '0 8 * * *'
+            
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+    # Step 1 : Checkout code. give the runner access to the codes in this repo
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Step 2 : Set up Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.12.1"  
+        
+    # Step 3 : Set up virtual env
+    - name: Set up virtual environment
+      run: python -m venv venv
+      
+    - name: Activate virtual environment
+      run: venv/Scripts/activate
+
+    # Step 4 : Install dependencies from requirement.txt file
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt 
+
+
+    # Step 5 : Run tests
+    - name: Run tests
+      run: pytest --junitxml=report.xml
+
+    # Step 6 : Generate report
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v3
+      with:
+          name: test-results
+          path: report.xml
+
+ 
