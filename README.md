@@ -24,6 +24,6 @@ This is a project for EM V2 StaffHub Automation. It is a test suite for StaffHub
 - to perform tests, simply run the following command while in the directory:
   - `pytest`
 - you can generate reports with pytest allure. run the following command prior to executing the test suite:
-  - 'pytest alluredir=allure-results'
--to generate the report, run the following command
-  - 'allure serve allure-results'
+  - `pytest alluredir=allure-results`
+- to generate the report, run the following command
+  - `allure serve allure-results`
